@@ -4,7 +4,6 @@ const genAIController = require('../controllers/geminiController')
 
 genAIRouter.post('/generate', async (req, res) => {
     const database = req.app.locals.database;
-    console.log(req.body)
     const result = await genAIController.GenerateResponse(database, req.body);
     if(result){
         res.status(200).send(result);
