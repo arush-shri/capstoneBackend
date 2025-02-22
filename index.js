@@ -1,13 +1,13 @@
 const express = require("express");
 const application = express();
-// const contributionRoute = require('./routes/contributeRoute')
+const genAiRoute = require('./routes/genai')
 const database = require('./controllers/dbConnector') 
 
 const cors = require("cors");
 
 application.use(cors());
 application.use(express.json());
-// application.use("/contribute", contributionRoute);
+application.use("/genai", genAiRoute);
 
 
 application.get('/', (req,res) => {
