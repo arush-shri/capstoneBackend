@@ -1,8 +1,8 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
-var razorpay = new Razorpay({ key_id: process.env.RAZOR_KEY_ID, key_secret: process.env.RAZOR_KEY_SEC })
 
 async function InitializePayment(db, body) {
+    var razorpay = new Razorpay({ key_id: process.env.RAZOR_KEY_ID, key_secret: process.env.RAZOR_KEY_SEC })
     const amount = body.amount;
     const payCollection = db.collection("Plans");
     const plan = await payCollection.findOne({ _id: amount });
@@ -10,7 +10,7 @@ async function InitializePayment(db, body) {
     if(plan){
         const uuid = crypto.randomBytes(16).toString('hex');
         var options = {
-            amount: amount*1000,
+            amount: amount*100,
             currency: "INR",
             receipt: uuid
         };
@@ -20,7 +20,7 @@ async function InitializePayment(db, body) {
         return { orderId: order.id, amount: order.amount, currency: order.currency }
     }
     else{
-        return "Invalid amount"
+        return {message: "Invalid amount"}
     }
 }
 
