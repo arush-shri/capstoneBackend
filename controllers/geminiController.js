@@ -57,16 +57,26 @@ Your response should be a structured JSON object with the following keys:
         const dataToStore = {
             _id: uuid,
             user: body.userid,
-            dateTime: new Date().toUTCString(),
+            dateTime: new Date(),
             userPrompt: body.userPrompt,
             aiResponse: aiResponse
         };
 
         await collection.insertOne(dataToStore);
-
-        return aiResponse;
+//TO CHECK
+        return {message: aiResponse};
     } else{
-        return "Out of tokens"
+        return {message: "Out of tokens"}
     }
 }
-module.exports = { GenerateResponse };
+
+async function MessageHistory(db, body) {
+    const email = body.userid
+    const history = await db.collection("Users")
+        .find({ user: email })
+        .sort({ dateTime: -1 })
+        .toArray() || [];
+    
+    return history;
+}
+module.exports = { GenerateResponse, MessageHistory };
